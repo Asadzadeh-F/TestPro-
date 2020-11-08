@@ -12,12 +12,14 @@ Handler::Handler(QObject* parent) : QObject(parent)
 	m_Index			 = 0;
 	m_networkManager = new NetworkManager(this);
 	m_networkProcess = new NetworkProcess(this); //Free With Qt
+    //m_logger         = new Logger(this);
 
 	connect(m_networkProcess, SIGNAL(detectedPacket(QVariant)), this, SLOT(onGetPacket(QVariant)));
 	connect(m_networkProcess, SIGNAL(packetLost()), this, SLOT(onPacketLost()));
 
-	connect(m_networkManager, SIGNAL(readyData(QByteArray)), m_networkProcess,
-			SLOT(processData(QByteArray)));
+
+    //uncommentttttttttttt
+    connect(m_networkManager, SIGNAL(readyData(QByteArray)), m_networkProcess,SLOT(processData(QByteArray)));
 	connect(m_networkManager, SIGNAL(connected()), this, SLOT(onConnectedToServer()));
 	connect(m_networkManager, SIGNAL(disconnected()), this, SLOT(onDisconnectedFromServer()));
 	//m_settings = new QSettings ("SEA", "TMS");
@@ -35,7 +37,7 @@ bool Handler::startUpdate(QString serverAdress, uint32_t port)
 	m_address = serverAdress;
 	m_port	  = port;
 
-	m_networkManager->connectToHost(m_address, m_port);
+    m_client->connectToHost(m_address, m_port);
 	setState(DetectionMessage);
 	return true;
 }
@@ -50,9 +52,9 @@ void Handler::processPacket(bool isPacketLost)
 		break;
 		case UpdateState::DetectionMessage: {
 			//lastIndex = 0;
-			lastIndex = m_settings.childKeys().contains("lastGetIndex")
+            lastIndex = m_settings.childKeys().contains("lastGetIndex")
 							? m_settings.value("lastGetIndex").toUInt() + 1
-							: 0;
+                            : 0;
 
 			//check hash for last receive parts.
 
@@ -72,6 +74,8 @@ void Handler::processPacket(bool isPacketLost)
 				m_networkManager->sendErrorCode(notmatchIndexs ? IndexMismatch : PacketLost);
 			else //packet correct
 			{
+                //receive reply of detection // get hash and total index
+
 				m_settings.setValue("lastGetIndex", m_RCVpacket.index);
 				if (m_RCVpacket.header.command == EndOfFile)
 				{
@@ -84,15 +88,26 @@ void Handler::processPacket(bool isPacketLost)
 							setState(InitState);
 							m_networkManager->sendAckMessage(0);
 							emit readyAllFileParts();
-							//m_logger.writeLog("GerFileParts state: ReadyAllFiles");
+                            //m_logger.writeLog(QtDebugMsg,"GerFileParts state: ReadyAllFiles");
 						}
+                        else
+                            m_networkManager->sendErrorCode(ErrorCode::HashMismatch);
 					}
 				}
-				else
-				{
-					m_networkManager->sendAckMessage(m_RCVpacket.index + 1);
-				}
-			}
+                else
+                    if (m_RCVpacket.header.command == 0xD1)
+                     {
+                         m_settings.setValue("Hash",m_RCVpacket.data);
+                         m_settings.setValue("TotalIndex",m_RCVpacket.index);
+                         m_networkManager->sendAckMessage(1);
+                    }
+
+                    else
+                    {
+
+                        m_networkManager->sendAckMessage(m_RCVpacket.index + 1);
+                    }
+                }
 		}
 		break;
 	}

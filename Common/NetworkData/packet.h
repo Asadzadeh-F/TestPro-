@@ -28,8 +28,8 @@ enum ErrorCode
 
 enum Command : uint8_t
 {
-	Detection = 0xD0,
-	GetFile	  = 0xF0,
+    Detection            = 0xD0,
+    GetFile              = 0xF0,
 	//HashRequest          = 0xA0,
 	EndOfFile			 = 0xF1,
 	Acknowledgement		 = 0xA0,
@@ -40,9 +40,9 @@ enum Command : uint8_t
 
 struct Header
 {
-	uint8_t	 header;
-	uint32_t sizeOfPayload;
-	Command	 command;
+    uint8_t              header;
+    uint32_t             sizeOfPayload;
+    Command              command;
 	Header()
 	{
 		header = HeaderValue;

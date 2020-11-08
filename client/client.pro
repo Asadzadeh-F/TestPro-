@@ -25,7 +25,7 @@ SOURCES += \
     Handler.cpp \
     NetworkManager.cpp \
     Logger.cpp \
-	main.cpp
+    main.cpp
 
 HEADERS += \
     ../Common/NetworkData/packet.h \
@@ -44,29 +44,24 @@ INCLUDEPATH += ../Common/ \
     ../Common/NetworkData/ \
     ../Common/Container
 
-unix:!macx: LIBS += -L$$PWD/lib/newlib/qttslib/lib/ -lts
+unix:!macx: LIBS += -L$$PWD/../lib/newlib/qttslib/lib/ -lts
 
-INCLUDEPATH += $$PWD/lib/newlib/qttslib/include
-DEPENDPATH += $$PWD/lib/newlib/qttslib/include
+INCLUDEPATH += $$PWD/../lib/newlib/qttslib/include
+DEPENDPATH += $$PWD/../lib/newlib/qttslib/include
 
-unix:!macx: LIBS += -L$$PWD/lib/szzt/ -lzt598
+unix:!macx: LIBS += -L$$PWD/../lib/szzt/ -lzt598
 
-INCLUDEPATH += $$PWD/lib/szzt
-DEPENDPATH += $$PWD/lib/szzt
+INCLUDEPATH += $$PWD/../lib/szzt
+DEPENDPATH += $$PWD/../lib/szzt
 
-unix:!macx: LIBS += -L$$PWD/lib/szzt/ -lztcard
+unix:!macx: LIBS += -L$$PWD/../lib/szzt/ -lztmisc
 
-INCLUDEPATH += $$PWD/lib/szzt
-DEPENDPATH += $$PWD/lib/szzt
+INCLUDEPATH += $$PWD/../lib/szzt
+DEPENDPATH += $$PWD/../lib/szzt
 
-unix:!macx: LIBS += -L$$PWD/lib/szzt/ -lztmisc
+unix:!macx: LIBS += -L$$PWD/../lib/szzt/ -lzttap
 
-INCLUDEPATH += $$PWD/lib/szzt
-DEPENDPATH += $$PWD/lib/szzt
-
-unix:!macx: LIBS += -L$$PWD/lib/szzt/ -lzttap
-
-INCLUDEPATH += $$PWD/lib/szzt
-DEPENDPATH += $$PWD/lib/szzt
+INCLUDEPATH += $$PWD/../lib/szzt
+DEPENDPATH += $$PWD/../lib/szzt
 
 unix: QMAKE_LFLAGS += -Wl,-rpath,"'\$$ORIGIN'"

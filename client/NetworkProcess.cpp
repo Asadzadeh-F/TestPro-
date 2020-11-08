@@ -12,6 +12,8 @@ NetworkProcess::NetworkProcess(QObject *parent) : QObject(parent)
 	m_startHeader			= 0;
 	m_memoryBlockManagement = nullptr;
 	m_memoryBlockManagement = new memoryBlockManagement;
+    m_networkManager        = nullptr;
+    m_networkManager        = new NetworkManager;
 }
 
 NetworkProcess::~NetworkProcess()
@@ -88,6 +90,7 @@ void NetworkProcess::processData(QByteArray data)
 						m_currentProcessState = ProcessPacketState::CleanProcess;
 						m_index++;
 						emit packetLost();
+                        m_networkManager->sendErrorCode(ErrorCode::PacketLost);
 						return;
 					}
 				}
@@ -155,8 +158,7 @@ void NetworkProcess::processData(QByteArray data)
 					if (m_packet.header.command == Detection)
 					{
 						int temp = QByteArray::fromRawData((char *) m_packet.data,
-														   m_packet.header.sizeOfPayload)
-									   .toInt();
+														   m_packet.header.sizeOfPayload).toInt();
 						m_setting.setValue("Hash", temp);
 					}
 				}
@@ -197,6 +199,7 @@ void NetworkProcess::processData(QByteArray data)
 					{
 						m_currentProcessState = ProcessPacketState::CleanProcess;
 						emit packetLost();
+                        m_networkManager->sendErrorCode(ErrorCode::PacketLost);
 						//log
 						return;
 					}
@@ -232,6 +235,7 @@ void NetworkProcess::processData(QByteArray data)
 						m_currentProcessState = ProcessPacketState::CleanProcess;
 						m_index++;
 						emit packetLost();
+                        m_networkManager->sendErrorCode(ErrorCode::PacketLost);
 						return; //header size command payload(header size command payload) crc footer header
 					}
 				}

@@ -8,6 +8,7 @@
 #include "Logger.h"
 #include "QSettings"
 #include "memoryBlockManagement.h"
+#include"NetworkManager.h"
 
 
 #include <QtCore/QObject>
@@ -60,6 +61,8 @@ public:
 
 
     memoryBlockManagement* m_memoryBlockManagement;
+    NetworkManager*        m_networkManager;
+
 
 
 

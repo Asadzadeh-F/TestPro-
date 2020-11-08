@@ -22,6 +22,8 @@ MainWindow::MainWindow(QWidget *parent)
     //m_networkProcess.reset(new NetworkProcess(this), [](NetworkProcess* p) { Q_UNUSED(p) });
     m_handler = new Handler();
     m_hiWord = "Hi...";
+    IP_Add = "172.45.10.10";
+    ui->IP->setText(IP_Add);
 }
 
 MainWindow::~MainWindow()
@@ -83,7 +85,7 @@ void MainWindow::onErrorInConnection(QAbstractSocket::SocketError error)
 
 void MainWindow::onReadData()
 {
-    m_networkProcess->onProcessData(m_clientTcp->readAll());
+    m_networkProcess->ProcessData(m_clientTcp->readAll());
 }
 
 void MainWindow::onSendDataToServer()

@@ -60,6 +60,7 @@ private:
     //NetworkProcess*                 m_networkProcess;
     Handler*                        m_handler;
     Logger*                         m_logger;
+    QString                         IP_Add;
 
     /*
      * QTcpSocket* m_clientTcp = nullptr; // not recommended

@@ -3,16 +3,17 @@
 #include <QApplication>
 #include <QSettings>
 #include <QtGlobal>
-//int main(int argc, char *argv[])
-//{
-//    QApplication a(argc, argv);
-//    MainWindow w;
-//    w.show();
-//    return a.exec();
-//}
 
-MainWindow* mainWindow = nullptr;
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.show();
+    return a.exec();
+}
 
+//MainWindow* mainWindow = nullptr;
+/*
 #if QT_VERSION > 0x049999
 #define qInstallMsgHandler qInstallMessageHandler
 void messageHandler(QtMsgType type, const QMessageLogContext&, const QString& msg)
@@ -31,16 +32,4 @@ void messageHandler(QtMsgType type, const char* msg)
 		qDebug(tmp.toStdString().c_str());
 }
 #endif
-
-int main(int argc, char* argv[])
-{
-	QCoreApplication::setOrganizationName("MySoft");
-	QCoreApplication::setOrganizationDomain("mysoft.com");
-	QCoreApplication::setApplicationName("Star Runner");
-
-	QApplication a(argc, argv);
-	qInstallMsgHandler(messageHandler);
-	mainWindow = new MainWindow();
-	mainWindow->show();
-	return a.exec();
-}
+*/

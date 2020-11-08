@@ -6,6 +6,7 @@
 #include "NetworkProcess.h"
 #include "NetworkManager.h"
 #include "Logger.h"
+#include "QStringList"
 
 enum UpdateState
 {
@@ -21,6 +22,7 @@ public:
     Handler(QObject *parent = 0);
     UpdateState Updatestatus();
     void setState(UpdateState state);
+    bool startUpdate(QString serverAdress, uint32_t port);
 
 private:
     NetworkProcess*       m_networkProcess;
@@ -53,7 +55,6 @@ public slots:
 	void onGetPacket(QVariant packet);
     void onPacketLost();
     //void onStartUpdate();
-    bool startUpdate(QString serverAdress, uint32_t port);
 
 signals:
     void readyAllFileParts();

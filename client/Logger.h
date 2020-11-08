@@ -5,6 +5,7 @@
 #include "QDateTime"
 #include "QTextStream"
 #include <mutex>
+#include "global.h"
 
 
 
@@ -12,7 +13,7 @@ class Logger :public QObject
 {
     Q_OBJECT
 public:
-	explicit Logger(QString fileName, QObject *parent = nullptr);
+    explicit Logger(QString fileName, QObject *parent = 0);
 	~Logger();
     void setShowDateTime(bool value);
 private:

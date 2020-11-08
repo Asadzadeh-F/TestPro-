@@ -1,8 +1,6 @@
 TEMPLATE = subdirs
 CONFIG += ordered
 
-SUBDIRS += client
-SUBDIRS += Tests
-
-
+SUBDIRS += client \
+           TMSTest
 
