@@ -25,23 +25,25 @@ public:
     bool startUpdate(QString serverAdress, uint32_t port);
 
 private:
-    NetworkProcess*       m_networkProcess;
-    NetworkManager*       m_networkManager;
-    UpdateState           m_updatestatus;
-    uint16_t              m_Index;
+	NetworkProcess* m_networkProcess = nullptr;
+	;
+	NetworkManager* m_networkManager = nullptr;
+	;
+	UpdateState			  m_updatestatus;
+	uint16_t              m_Index;
     uint16_t              lastIndex;
     uint16_t              totalIndex;
     uint16_t              currentIndex;
-    QTcpSocket*           m_client;
-    bool                  isPacketLost;
+	bool                  isPacketLost;
     Packet                m_RCVpacket;
     QByteArray            data;
     uint16_t              notmatchIndexs;
     QString               m_address;
-    uint32_t              m_port;
-    Handler*              m_handler;
-    //Logger                m_logger;
-    QSettings             m_settings;
+	uint32_t			  m_port;
+	Handler*			  m_handler = nullptr;
+	;
+	//Logger                m_logger;
+	QSettings             m_settings;
     uint64_t              m_hash;
 
 

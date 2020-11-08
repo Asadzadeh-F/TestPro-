@@ -14,7 +14,7 @@ NetworkManager::NetworkManager(QObject* parent) : QTcpSocket(parent)
 	//connect(client,SIGNAL(disconnected()),this,SIGNAL(disconnected()));
 	//connect(client,SIGNAL(QOverload<QAbstractSocket::SocketError>::of(&QAbstractSocket::error)),this,&NetworkManager:: onErrorInConnection(QAbstractSocket::SocketError error));
 	//connect(client,SIGNAL(&QTcpSocket::readyRead()),this,);
-    connect(this, SIGNAL(NetworkManager::readyRead()), this, SLOT(NetworkManager::onReceiveData()));
+	connect(this, SIGNAL(readyRead()), this, SLOT(onReceiveData()));
 }
 
 NetworkManager::~NetworkManager()

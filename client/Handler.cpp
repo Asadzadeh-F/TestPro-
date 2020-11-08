@@ -17,7 +17,6 @@ Handler::Handler(QObject* parent) : QObject(parent)
 	connect(m_networkProcess, SIGNAL(detectedPacket(QVariant)), this, SLOT(onGetPacket(QVariant)));
 	connect(m_networkProcess, SIGNAL(packetLost()), this, SLOT(onPacketLost()));
 
-
     //uncommentttttttttttt
     connect(m_networkManager, SIGNAL(readyData(QByteArray)), m_networkProcess,SLOT(processData(QByteArray)));
 	connect(m_networkManager, SIGNAL(connected()), this, SLOT(onConnectedToServer()));
@@ -37,7 +36,7 @@ bool Handler::startUpdate(QString serverAdress, uint32_t port)
 	m_address = serverAdress;
 	m_port	  = port;
 
-    m_client->connectToHost(m_address, m_port);
+	m_networkManager->connectToHost(m_address, m_port);
 	setState(DetectionMessage);
 	return true;
 }

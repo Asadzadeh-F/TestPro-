@@ -9,21 +9,22 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-    //qRegisterMetaType<PacketData>();
-    ui->setupUi(this);
-    connect(this, SIGNAL(readyPacket(PacketData)), this, SLOT(onGetNewPacket(PacketData)));
+	//qRegisterMetaType<PacketData>();
+	ui->setupUi(this);
+	m_hiWord = "Hi...";
+	IP_Add	 = "172.45.10.10";
+	ui->IP->setText(IP_Add);
 
-    connect(ui->connect, SIGNAL(clicked()), this, SLOT(onStart()));
-    connect(ui->clear, SIGNAL(clicked()), this, SLOT(onClearLogBrowser()));
-    connect(ui->send, SIGNAL(clicked()), this, SLOT(onSendDataToServer()));
+	m_handler = new Handler();
+	connect(m_handler, SIGNAL(readyAllFileParts()), this, SLOT(onAllFilePartsReady()));
 
-    //connect(m_networkProcess->get(), SIGNAL(detectedPacket(QVariant)), m_handler, SLOT(onGetPacket(QVariant)));
+	connect(ui->connect, SIGNAL(clicked()), this, SLOT(onStart()));
+	connect(ui->clear, SIGNAL(clicked()), this, SLOT(onClearLogBrowser()));
+	//connect(ui->send, SIGNAL(clicked()), this, SLOT(onSendDataToServer()));
 
-    //m_networkProcess.reset(new NetworkProcess(this), [](NetworkProcess* p) { Q_UNUSED(p) });
-    m_handler = new Handler();
-    m_hiWord = "Hi...";
-    IP_Add = "172.45.10.10";
-    ui->IP->setText(IP_Add);
+	//connect(m_networkProcess->get(), SIGNAL(detectedPacket(QVariant)), m_handler, SLOT(onGetPacket(QVariant)));
+
+	//m_networkProcess.reset(new NetworkProcess(this), [](NetworkProcess* p) { Q_UNUSED(p) });
 }
 
 MainWindow::~MainWindow()
@@ -96,7 +97,12 @@ void MainWindow::onSendDataToServer()
 void MainWindow::onClearLogBrowser()
 {
     m_bufferData = "";
-    ui->LogBrowser->setText(m_bufferData);
+	ui->LogBrowser->setText(m_bufferData);
+}
+
+void MainWindow::onAllFilePartsReady()
+{
+	qDebug() << "All file parts received.";
 }
 void MainWindow::onClear() {}
 
