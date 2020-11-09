@@ -9,22 +9,23 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
-	//qRegisterMetaType<PacketData>();
-	ui->setupUi(this);
-	m_hiWord = "Hi...";
-	IP_Add	 = "172.45.10.10";
-	ui->IP->setText(IP_Add);
+    //qRegisterMetaType<PacketData>();
+    ui->setupUi(this);
+    m_handler   = nullptr;
+    //m_handler   = new Handler(this);
+    m_hiWord    = "Hi...";
+    IP_Add      = "127.0.0.1";
+    ui->IP->setText(IP_Add);
+    //connect(this, SIGNAL(readyPacket(PacketData)), this, SLOT(onGetNewPacket(PacketData)));
 
-	m_handler = new Handler();
-	connect(m_handler, SIGNAL(readyAllFileParts()), this, SLOT(onAllFilePartsReady()));
+    connect(ui->connect, SIGNAL(clicked()), this, SLOT(onStart()));
+    connect(ui->clear, SIGNAL(clicked()), this, SLOT(onClearLogBrowser()));
+    //connect(ui->send, SIGNAL(clicked()), this, SLOT(onSendDataToServer()));
 
-	connect(ui->connect, SIGNAL(clicked()), this, SLOT(onStart()));
-	connect(ui->clear, SIGNAL(clicked()), this, SLOT(onClearLogBrowser()));
-	//connect(ui->send, SIGNAL(clicked()), this, SLOT(onSendDataToServer()));
+    //connect(m_networkProcess->get(), SIGNAL(detectedPacket(QVariant)), m_handler, SLOT(onGetPacket(QVariant)));
 
-	//connect(m_networkProcess->get(), SIGNAL(detectedPacket(QVariant)), m_handler, SLOT(onGetPacket(QVariant)));
+    //m_networkProcess.reset(new NetworkProcess(this), [](NetworkProcess* p) { Q_UNUSED(p) });
 
-	//m_networkProcess.reset(new NetworkProcess(this), [](NetworkProcess* p) { Q_UNUSED(p) });
 }
 
 MainWindow::~MainWindow()
@@ -65,7 +66,11 @@ void MainWindow::addLog(QString log, LogType logType)
 
 void MainWindow::onStart()
 {
-    m_handler->startUpdate(ui->IP->text(), ui->Port->value());
+    if (!m_handler)
+    {
+        m_handler = new Handler(this);
+        m_handler->startUpdate(ui->IP->text(), ui->Port->value());
+    }
 }
 /*
 void MainWindow::onConnected()
@@ -97,12 +102,7 @@ void MainWindow::onSendDataToServer()
 void MainWindow::onClearLogBrowser()
 {
     m_bufferData = "";
-	ui->LogBrowser->setText(m_bufferData);
-}
-
-void MainWindow::onAllFilePartsReady()
-{
-	qDebug() << "All file parts received.";
+    ui->LogBrowser->setText(m_bufferData);
 }
 void MainWindow::onClear() {}
 

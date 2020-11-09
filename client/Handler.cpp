@@ -3,24 +3,30 @@
 #include "NetworkProcess.h"
 #include "QTcpSocket"
 #include "memoryBlockManagement.h"
+#include <string>
+#include <QMessageBox>
 
 class NetworkManager;
 class NetworkProcess;
 
 Handler::Handler(QObject* parent) : QObject(parent)
 {
-	m_Index			 = 0;
-	m_networkManager = new NetworkManager(this);
-	m_networkProcess = new NetworkProcess(this); //Free With Qt
-    //m_logger         = new Logger(this);
+    m_Index              = 0;
+    m_networkManager     = 0;
+    m_networkProcess     = 0;
+    m_networkManager     = new NetworkManager(this);
+    m_networkProcess     = new NetworkProcess(this); //Free With Qt
+    //m_logger           = new Logger(this);
 
 	connect(m_networkProcess, SIGNAL(detectedPacket(QVariant)), this, SLOT(onGetPacket(QVariant)));
 	connect(m_networkProcess, SIGNAL(packetLost()), this, SLOT(onPacketLost()));
-
+    connect(m_networkProcess, SIGNAL(stateChanged(QAbstractSocket::SocketState)), SLOT(tcpSocketState(QAbstractSocket::SocketState)), Qt::UniqueConnection);
+    connect(m_networkProcess, SIGNAL(error(QAbstractSocket::SocketError)), SLOT(connectionError(QAbstractSocket::SocketError)), Qt::UniqueConnection);
     //uncommentttttttttttt
     connect(m_networkManager, SIGNAL(readyData(QByteArray)), m_networkProcess,SLOT(processData(QByteArray)));
 	connect(m_networkManager, SIGNAL(connected()), this, SLOT(onConnectedToServer()));
 	connect(m_networkManager, SIGNAL(disconnected()), this, SLOT(onDisconnectedFromServer()));
+    connect(m_networkManager, SIGNAL(stateChanged(QAbstractSocket::SocketState)), this, SLOT(connectionWasClosed(QAbstractSocket::SocketState)));
 	//m_settings = new QSettings ("SEA", "TMS");
 	QSettings m_settings("SEA", "TMS");
 	m_settings.beginGroup("UpdateData");
@@ -36,7 +42,7 @@ bool Handler::startUpdate(QString serverAdress, uint32_t port)
 	m_address = serverAdress;
 	m_port	  = port;
 
-	m_networkManager->connectToHost(m_address, m_port);
+    m_networkManager->connectToHost(m_address, m_port);
 	setState(DetectionMessage);
 	return true;
 }
@@ -126,6 +132,7 @@ void Handler::onPacketLost()
 void Handler::onConnectedToServer()
 {
 	processPacket();
+    qDebug() << "Connected to Server";
 }
 
 void Handler::onDisconnectedFromServer()
@@ -146,3 +153,45 @@ void Handler::setState(UpdateState status)
 		//emit statusChanged();
 	}
 }
+
+void Handler::connectionWasClosed(QAbstractSocket::SocketState state){
+
+    qDebug() << "!!! SocketState changed !!!" << state ;
+
+}
+/*
+void Handler::connectionError(QAbstractSocket::SocketError socketError)
+{
+    std::string errorStr = "ERROR: " + m_handler->errorString().toStdString();
+    QMessageBox::information(this, tr("Tcp Server Client"), tr(errorStr.c_str()));
+}
+
+void Handler::tcpSocketState(QAbstractSocket::SocketState socketState)
+{
+    switch (socketState) {
+        case QAbstractSocket::UnconnectedState:
+            QMessageBox::information(this, tr("Tcp Server Client"), tr("The socket is not connected."));
+            break;
+        case QAbstractSocket::HostLookupState:
+            QMessageBox::information(this, tr("Tcp Server Client"), tr("The socket is performing a hostname lookup."));
+            break;
+        case QAbstractSocket::ConnectedState:
+            QMessageBox::information(this, tr("Tcp Server Client"), tr("A connection is established."));
+            break;
+        case QAbstractSocket::ConnectingState:
+            QMessageBox::information(this, tr("Tcp Server Client"), tr("The socket has started establishing a connection."));
+            break;
+        case QAbstractSocket::BoundState:
+            QMessageBox::information(this, tr("Tcp Server Client"), tr("The socket is bound to an address and port."));
+            break;
+        case QAbstractSocket::ClosingState:
+            QMessageBox::information(this, tr("Tcp Server Client"), tr("The socket is about to close."));
+            break;
+        case QAbstractSocket::ListeningState:
+            QMessageBox::information(this, tr("Tcp Server Client"), tr("The socket is listening."));
+            break;
+        default:
+            QMessageBox::information(this, tr("Tcp Server Client"), tr("Unknown State."));
+    }
+}
+*/

@@ -43,8 +43,7 @@ public slots:
     void onStart();
     void onClear();
     void onClearLogBrowser();
-	void onAllFilePartsReady();
-	//void onConnected();
+    //void onConnected();
     //void onDisconnected();
     //void onErrorInConnection(QAbstractSocket::SocketError error);
     //void onReadData();
