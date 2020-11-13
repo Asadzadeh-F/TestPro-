@@ -54,6 +54,9 @@ public slots:
 
 	void onGetPacket(QVariant packet);
     void onPacketLost();
+    void connectionWasClosed(QAbstractSocket::SocketState state = QAbstractSocket::UnconnectedState);
+    //void connectionError(QAbstractSocket::SocketError);
+    //void tcpSocketState(QAbstractSocket::SocketState);
     //void onStartUpdate();
 
 signals:

@@ -40,9 +40,11 @@ public:
 public:
     explicit NetworkProcess(QObject *parent = 0);
     NetworkProcess::ProcessPacketState currentProcessState () const;
-    void processData(QByteArray);
     ~NetworkProcess();
     bool checkCRC(QVariant *packet);
+public slots:
+    void processData(QByteArray);
+
 
 signals:
    void  detectedPacket(QVariant);
@@ -67,8 +69,8 @@ public:
 
 
 private:
-    Packet m_packet;
-    Logger* m_logger;
+    Packet                 m_packet;
+    Logger*                m_logger;
 };
 
 #endif // NETWORKPROCESS
