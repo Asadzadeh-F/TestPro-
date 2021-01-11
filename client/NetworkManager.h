@@ -15,9 +15,9 @@ public:
     //uint64_t write(char* data, uint64_t size_t);
 
 
-    bool sendAckMessage(int16_t index);
+    bool sendAckMessage(char* serial, int16_t index);
     bool sendErrorCode(ErrorCode errorcode);
-    bool sendDetectionMessage(uint64_t serial, uint16_t thelastRCVIndex);
+    bool sendDetectionMessage(char* serial, uint16_t thelastRCVIndex);
     //bool connectToServer(QString serverAddress, uint32_t port);
 
 signals:
@@ -31,7 +31,7 @@ public slots:
     //void onDisconnected();
     //void onErrorInConnection(QAbstractSocket::SocketError error);
     void onReceiveData();
-
+    void displayError(QAbstractSocket::SocketError error);
 private:
     bool writePacket(QByteArray& data);
     //QTcpSocket            *client;

@@ -1,14 +1,13 @@
 #ifndef NETWORKPROCESS
 #define NETWORKPROCESS
 
-#include "../Common/NetworkData/packet.h"
+#include "packet.h"
 #include "stdint.h"
-//#include "../client"
 #include "QVariant"
 #include "Logger.h"
-#include "QSettings"
+#include "Settings.h"
+#include "NetworkManager.h"
 #include "memoryBlockManagement.h"
-#include"NetworkManager.h"
 
 
 #include <QtCore/QObject>
@@ -58,8 +57,11 @@ public:
     uint64_t               m_index ;
     uint64_t               m_startHeader;
     //SimplePacket         m_simplePacket;
-    QSettings              m_setting;
+    //Settings*              m_settings;
     uint16_t               m_hash;
+    uint32_t               tempHash;
+
+
 
 
     memoryBlockManagement* m_memoryBlockManagement;
@@ -74,4 +76,3 @@ private:
 };
 
 #endif // NETWORKPROCESS
-
