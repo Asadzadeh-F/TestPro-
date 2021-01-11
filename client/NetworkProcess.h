@@ -1,14 +1,13 @@
 #ifndef NETWORKPROCESS
 #define NETWORKPROCESS
 
-#include "../Common/NetworkData/packet.h"
+#include "packet.h"
 #include "stdint.h"
-//#include "../client"
 #include "QVariant"
 #include "Logger.h"
-#include "QSettings"
+#include "Settings.h"
+#include "NetworkManager.h"
 #include "memoryBlockManagement.h"
-#include"NetworkManager.h"
 
 
 #include <QtCore/QObject>
@@ -40,9 +39,11 @@ public:
 public:
     explicit NetworkProcess(QObject *parent = 0);
     NetworkProcess::ProcessPacketState currentProcessState () const;
-    void processData(QByteArray);
     ~NetworkProcess();
     bool checkCRC(QVariant *packet);
+public slots:
+    void processData(QByteArray);
+
 
 signals:
    void  detectedPacket(QVariant);
@@ -56,8 +57,11 @@ public:
     uint64_t               m_index ;
     uint64_t               m_startHeader;
     //SimplePacket         m_simplePacket;
-    QSettings              m_setting;
+    //Settings*              m_settings;
     uint16_t               m_hash;
+    uint32_t               tempHash;
+
+
 
 
     memoryBlockManagement* m_memoryBlockManagement;
@@ -67,9 +71,8 @@ public:
 
 
 private:
-    Packet m_packet;
-    Logger* m_logger;
+    Packet                 m_packet;
+    Logger*                m_logger;
 };
 
 #endif // NETWORKPROCESS
-

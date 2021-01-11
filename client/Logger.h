@@ -13,13 +13,15 @@ class Logger :public QObject
 {
     Q_OBJECT
 public:
-    explicit Logger(QString fileName, QObject *parent = 0);
+    explicit Logger(QObject *parent = 0);
 	~Logger();
     void setShowDateTime(bool value);
 private:
     QFile *file;
-    bool m_showDate;
+    bool  m_showDate;
 private slots:
+    //void writeLog(QtMsgType type,const QString &value);
+public slots:
     void writeLog(QtMsgType type,const QString &value);
 
 };
